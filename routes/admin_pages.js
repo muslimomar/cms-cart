@@ -86,8 +86,8 @@ router.post('/reorder-pages', (req,res) => {
 });
 
 // GET edit page
-router.get('/edit-page/:slug', (req,res) => {
-  Page.findOne({slug:req.params.slug}, (err,page) => {
+router.get('/edit-page/:id', (req,res) => {
+  Page.findById(req.params.id, (err,page) => {
     if(err) return console.log(err);
 
     res.render('admin/edit_page', {
@@ -113,7 +113,7 @@ router.post('/edit-page/:id', (req,res) => {
     var slug = title.replace(/\s+/g, '-').toLowerCase();
   }
   var content = req.body.content;
-  var id = req.body.id;
+  var id = req.params.id;
 
   var errors = req.validationErrors();
 
@@ -139,7 +139,7 @@ router.post('/edit-page/:id', (req,res) => {
                 return console.log(err);
               }
               req.flash('success', 'Page edited!');
-              res.redirect('/admin/pages/edit-page/'+page.slug);
+              res.redirect('/admin/pages/edit-page/'+id);
             });
         });
 

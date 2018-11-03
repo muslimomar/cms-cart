@@ -78,16 +78,12 @@ router.post('/edit-category/:id', (req,res) => {
   if(errors) {
     return res.render('admin/edit_category', {errors,title,id});
   }else{
-    console.log('id: ', id);
     Category.findOne({slug, _id:{'$ne':id}}, (err,category) => {
       if(category) {
         req.flash('danger', 'Category title exists, choose another one.');
         res.render('admin/edit_category', {title,id});
       }else{
         Category.findById(id, (err,category) => {
-          console.log('**** Error: ', err);
-          console.log('**** Category: ', category);
-          console.log(id);
           if(err) return console.log(err);
           category.title = title;
           category.slug= slug;
@@ -107,13 +103,12 @@ router.post('/edit-category/:id', (req,res) => {
 });
 
 // GET delete page
-router.get('/delete-page/:id', (req,res) => {
-  Page.findByIdAndRemove(req.params.id, (err) => {
+router.get('/delete-category/:id', (req,res) => {
+  Category.findByIdAndRemove(req.params.id, (err) => {
     if(err) return console.log(err);
 
-    req.flash('success', 'Page deleted!');
-    res.redirect('/admin/pages/');
-
+    req.flash('success', 'Category deleted!');
+    res.redirect('/admin/categories/');
   });
 
 });
